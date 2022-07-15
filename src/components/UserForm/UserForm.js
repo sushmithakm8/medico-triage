@@ -22,7 +22,8 @@ import SnackbarContent from "@material-ui/core/SnackbarContent";
 import IconButton from "@material-ui/core/IconButton";
 import ErrorIcon from "@material-ui/icons/Error";
 import CloseIcon from "@material-ui/icons/Close";
-import { LocalHospitalSharp } from "@material-ui/icons";
+import { LocalHospitalRounded, LocalHospitalSharp } from "@material-ui/icons";
+import { blue } from "@material-ui/core/colors";
 
 class Registration extends Component {
   state = {
@@ -34,6 +35,7 @@ class Registration extends Component {
     phoneNumber: true,
     error: null,
     errorOpen: false,
+    showPage: false,
   };
   errorClose = (e) => {
     this.setState({
@@ -76,7 +78,9 @@ class Registration extends Component {
   };
 
   submitRegistration = (e) => {
-    this.props.history.push("path/to/push");
+    if (this.state.firstName !== "" && this.state.lastName !== "") {
+      this.setState({ showPage: true });
+    }
   };
 
   render() {
@@ -88,21 +92,20 @@ class Registration extends Component {
 
         <Paper className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LocalHospitalSharp className={classes.icon} />
+            <LocalHospitalRounded
+              className={classes.icon}
+              style={{ color: blue[500], fontSize: 30 }}
+            />
           </Avatar>
 
-          <form
-            className={classes.form}
-            onSubmit={() => this.submitRegistration}
-          >
-            {" "}
+          <form className={classes.form}>
             <Grid item container spacing={1} justify="center">
               <Grid item xs={12} sm={6} md={6}>
                 <FormControl required fullWidth margin="normal">
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    // required
+                    required
                     fullWidth
                     id="firstName"
                     label="First Name"
@@ -114,13 +117,10 @@ class Registration extends Component {
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <FormControl required fullWidth margin="normal">
-                  {/* <InputLabel htmlFor="lastName" className={classes.labels}>
-                    Last Name
-                  </InputLabel> */}
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    // required
+                    required
                     fullWidth
                     id="lastName"
                     label="Last Name"
@@ -178,12 +178,11 @@ class Registration extends Component {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
-                <FormControl required fullWidth margin="normal">
+                <FormControl fullWidth margin="normal">
                   <TextField
                     name="age"
                     variant="outlined"
                     margin="normal"
-                    // required
                     fullWidth
                     id="age"
                     label="Age in years"
@@ -194,12 +193,11 @@ class Registration extends Component {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
-                <FormControl required fullWidth margin="normal">
+                <FormControl fullWidth margin="normal">
                   <TextField
                     name="phoneNumber"
                     variant="outlined"
                     margin="normal"
-                    // required
                     fullWidth
                     id="phoneNumber"
                     label="Phone Number"
@@ -216,8 +214,8 @@ class Registration extends Component {
                   disableRipple
                   variant="contained"
                   className={classes.button}
+                  onClick={() => this.submitRegistration}
                   type="submit"
-                  onClick={this.submitRegistration}
                   href="/triage"
                 >
                   Next

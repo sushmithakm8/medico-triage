@@ -93,10 +93,10 @@ export default function MedicoTriage() {
   return (
     <div className="head">
       <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <Grid container spacing={4}>
+        <Paper className={classes.paper} style={{ background: "#3f50b5" }}>
+          <Grid container spacing={1}>
             <Grid item xs={12} sm container>
-              <Grid item xs container spacing={3}>
+              <Grid item xs container>
                 <Grid item xs={10}>
                   <Autocomplete
                     id="asynchronous-demo"
@@ -117,8 +117,9 @@ export default function MedicoTriage() {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Enter Synmptoms Here"
+                        placeholder="Enter Synmptoms Here"
                         variant="outlined"
+                        style={{ background: "#ffffff" }}
                         InputProps={{
                           ...params.InputProps,
                           endAdornment: (
@@ -143,7 +144,7 @@ export default function MedicoTriage() {
                 >
                   <SearchOutlined
                     className="fa fa-plus-circle"
-                    style={{ color: blue[500], fontSize: 30 }}
+                    style={{ color: "white", fontSize: 35 }}
                   />
                 </Grid>
               </Grid>
