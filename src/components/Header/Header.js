@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
-
+import "./Header.module.css";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),

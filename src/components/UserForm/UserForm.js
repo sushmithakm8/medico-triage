@@ -78,19 +78,6 @@ class Registration extends Component {
   submitRegistration = (e) => {
     this.props.history.push("path/to/push");
   };
-  // if (!this.passwordMatch()) {
-  //   this.setState({
-  //     errorOpen: true,
-  //     error: "Passwords don't match",
-  //   });
-  // }
-  // const newUserCredentials = {
-  //   firstName: this.state.gender,
-  //   // password: this.state.password,
-  //   // passwordConfrim: this.state.passwordConfrim,
-  // };
-  // console.log("this.props.newUserCredentials", newUserCredentials);
-  //dispath to userActions
 
   render() {
     const { classes } = this.props;

@@ -67,10 +67,6 @@ export default function Main(props) {
       <CssBaseline />
       <Header></Header>
       <Toolbar id="back-to-top-anchor" />
-      {/* <Routes>
-        <Route path="/" element={<MainContent />} />
-        <Route path="/a" element={<MedicoTriage />} />
-      </Routes> */}
 
       <BrowserRouter>
         <Routes>
@@ -78,7 +74,6 @@ export default function Main(props) {
           <Route path="/triage" element={<MedicoTriage />} />
         </Routes>
       </BrowserRouter>
-      {/* <MainContent /> */}
       <ScrollTop {...props}>
         <Fab color="secondary" size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />
