@@ -1,3 +1,4 @@
+
 import React from "react";
 import PropTypes from "prop-types";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -15,7 +16,7 @@ import MedicoTriage from "../Medico-triage/Medico-triage";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    position: "fixed",
+    position: 'fixed',
     bottom: theme.spacing(2),
     right: theme.spacing(2),
   },
@@ -35,11 +36,11 @@ function ScrollTop(props) {
 
   const handleClick = (event) => {
     const anchor = (event.target.ownerDocument || document).querySelector(
-      "#back-to-top-anchor"
+      '#back-to-top-anchor'
     );
 
     if (anchor) {
-      anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
@@ -66,6 +67,7 @@ export default function Main(props) {
     <React.Fragment>
       <CssBaseline />
       <Header></Header>
+
       <Toolbar id="back-to-top-anchor" />
 
       <BrowserRouter>
