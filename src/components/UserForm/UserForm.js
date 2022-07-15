@@ -1,7 +1,6 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { register } from "./UserForm.module";
-import InputAdornment from "@material-ui/core/InputAdornment";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
@@ -22,8 +21,6 @@ import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import IconButton from "@material-ui/core/IconButton";
 import ErrorIcon from "@material-ui/icons/Error";
-import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
-import VisibilityOffTwoToneIcon from "@material-ui/icons/VisibilityOffTwoTone";
 import CloseIcon from "@material-ui/icons/Close";
 import { LocalHospitalSharp } from "@material-ui/icons";
 
@@ -38,7 +35,6 @@ class Registration extends Component {
     error: null,
     errorOpen: false,
   };
-
   errorClose = (e) => {
     this.setState({
       errorOpen: false,
@@ -78,25 +74,14 @@ class Registration extends Component {
     }
     return true;
   };
+
   submitRegistration = (e) => {
-    e.preventDefault();
-    if (!this.passwordMatch()) {
-      this.setState({
-        errorOpen: true,
-        error: "Passwords don't match",
-      });
-    }
-    const newUserCredentials = {
-      firstName: this.state.gender,
-      // password: this.state.password,
-      // passwordConfrim: this.state.passwordConfrim,
-    };
-    console.log("this.props.newUserCredentials", newUserCredentials);
-    //dispath to userActions
+    this.props.history.push("path/to/push");
   };
 
   render() {
     const { classes } = this.props;
+
     return (
       <div className={classes.main}>
         <CssBaseline />
@@ -117,7 +102,7 @@ class Registration extends Component {
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
+                    // required
                     fullWidth
                     id="firstName"
                     label="First Name"
@@ -135,12 +120,11 @@ class Registration extends Component {
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
+                    // required
                     fullWidth
                     id="lastName"
                     label="Last Name"
                     name="lastName"
-                    autoFocus
                     onChange={this.handleChange("lastName")}
                   />
                 </FormControl>
@@ -181,7 +165,7 @@ class Registration extends Component {
                 <InputLabel htmlFor="dob" className={classes.labels}>
                   Date of Birth
                 </InputLabel>
-                <FormControl required fullWidth margin="normal">
+                <FormControl fullWidth margin="normal">
                   <Input
                     name="dob"
                     type="date"
@@ -199,11 +183,10 @@ class Registration extends Component {
                     name="age"
                     variant="outlined"
                     margin="normal"
-                    required
+                    // required
                     fullWidth
                     id="age"
                     label="Age in years"
-                    autoFocus
                     disabled
                     value={this.state.age}
                     onChange={this.handleChange("age")}
@@ -216,11 +199,10 @@ class Registration extends Component {
                     name="phoneNumber"
                     variant="outlined"
                     margin="normal"
-                    required
+                    // required
                     fullWidth
                     id="phoneNumber"
                     label="Phone Number"
-                    autoFocus
                     onChange={this.handleChange("phoneNumber")}
                   />
                 </FormControl>
@@ -236,47 +218,13 @@ class Registration extends Component {
                   className={classes.button}
                   type="submit"
                   onClick={this.submitRegistration}
+                  href="/triage"
                 >
                   Next
                 </Button>
               </Grid>
             </Grid>
           </form>
-
-          {this.state.error ? (
-            <Snackbar
-              variant="error"
-              key={this.state.error}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "center",
-              }}
-              open={this.state.errorOpen}
-              onClose={this.errorClose}
-              autoHideDuration={3000}
-            >
-              <SnackbarContent
-                className={classes.error}
-                message={
-                  <div>
-                    <span style={{ marginRight: "8px" }}>
-                      <ErrorIcon fontSize="large" color="error" />
-                    </span>
-                    <span> {this.state.error} </span>
-                  </div>
-                }
-                action={[
-                  <IconButton
-                    key="close"
-                    aria-label="close"
-                    onClick={this.errorClose}
-                  >
-                    <CloseIcon color="error" />
-                  </IconButton>,
-                ]}
-              />
-            </Snackbar>
-          ) : null}
         </Paper>
       </div>
     );

@@ -1,14 +1,17 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Fab from '@material-ui/core/Fab';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import Zoom from '@material-ui/core/Zoom';
-import MainContent from '../MainContent/MainContent';
-import Header from '../Header/Header';
+
+import React from "react";
+import PropTypes from "prop-types";
+import Toolbar from "@material-ui/core/Toolbar";
+import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
+import Fab from "@material-ui/core/Fab";
+import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import Zoom from "@material-ui/core/Zoom";
+import MainContent from "../MainContent/MainContent";
+import Header from "../Header/Header";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MedicoTriage from "../Medico-triage/Medico-triage";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,22 +67,20 @@ export default function Main(props) {
     <React.Fragment>
       <CssBaseline />
       <Header></Header>
-      <div
-        style={{
-          backgroundImage: `url("https://startupbox.online/wp-content/uploads/sites/26/2022/06/hms1-1-1.jpg")`,
-          height: '100vh',
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        <Toolbar id="back-to-top-anchor" />
-        <MainContent></MainContent>
-        <ScrollTop {...props}>
-          <Fab color="secondary" size="small" aria-label="scroll back to top">
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </ScrollTop>
-      </div>
+
+      <Toolbar id="back-to-top-anchor" />
+
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<MainContent />} />
+          <Route path="/triage" element={<MedicoTriage />} />
+        </Routes>
+      </BrowserRouter>
+      <ScrollTop {...props}>
+        <Fab color="secondary" size="small" aria-label="scroll back to top">
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </ScrollTop>
     </React.Fragment>
   );
 }
