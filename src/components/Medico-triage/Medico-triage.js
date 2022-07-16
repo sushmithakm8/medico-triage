@@ -13,13 +13,17 @@
 // export default MedicoTriage;
 /* eslint-disable no-use-before-define */
 
-import React from "react";
-import Checkbox from "@material-ui/core/Checkbox";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import "./Medico-triage.css";
+import React from 'react';
+import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import './Medico-triage.css';
 import {
   Box,
   ButtonBase,
@@ -29,9 +33,9 @@ import {
   makeStyles,
   Paper,
   Typography,
-} from "@material-ui/core";
-import { SearchOutlined } from "@material-ui/icons";
-import { blue } from "@material-ui/core/colors";
+} from '@material-ui/core';
+import { SearchOutlined } from '@material-ui/icons';
+import { blue } from '@material-ui/core/colors';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -41,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    margin: "auto",
+    margin: 'auto',
     maxWidth: 700,
   },
   image: {
@@ -49,10 +53,10 @@ const useStyles = makeStyles((theme) => ({
     height: 128,
   },
   img: {
-    margin: "auto",
-    display: "block",
-    maxWidth: "100%",
-    maxHeight: "100%",
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
   },
 }));
 export default function MedicoTriage() {
@@ -70,7 +74,7 @@ export default function MedicoTriage() {
 
     (async () => {
       const response = await fetch(
-        "https://country.register.gov.uk/records.json?page-size=5000"
+        'https://country.register.gov.uk/records.json?page-size=5000'
       );
       // await sleep(1e3); // For demo purposes.
       const countries = await response.json();
@@ -91,66 +95,90 @@ export default function MedicoTriage() {
     }
   }, [open]);
   return (
-    <div className="head">
-      <div className={classes.root}>
-        <Paper className={classes.paper} style={{ background: "#3f50b5" }}>
-          <Grid container spacing={1}>
-            <Grid item xs={12} sm container>
-              <Grid item xs container>
-                <Grid item xs={10}>
-                  <Autocomplete
-                    id="asynchronous-demo"
-                    multiple
-                    open={open}
-                    onOpen={() => {
-                      setOpen(true);
-                    }}
-                    onClose={() => {
-                      setOpen(false);
-                    }}
-                    getOptionSelected={(option, value) =>
-                      option.name === value.title
-                    }
-                    getOptionLabel={(option) => option.title}
-                    options={top100Films}
-                    loading={loading}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="Enter Synmptoms Here"
-                        variant="outlined"
-                        style={{ background: "#ffffff" }}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <React.Fragment>
-                              {loading ? (
-                                <CircularProgress color="inherit" size={20} />
-                              ) : null}
-                              {params.InputProps.endAdornment}
-                            </React.Fragment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  container
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <SearchOutlined
-                    className="fa fa-plus-circle"
-                    style={{ color: "white", fontSize: 35 }}
-                  />
+    <div className="container">
+      <div className="head">
+        <div className={classes.root}>
+          <Paper className={classes.paper} style={{ background: '#3f50b5' }}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm container>
+                <Grid item xs container>
+                  <Grid item xs={10}>
+                    <Autocomplete
+                      id="asynchronous-demo"
+                      multiple
+                      open={open}
+                      onOpen={() => {
+                        setOpen(true);
+                      }}
+                      onClose={() => {
+                        setOpen(false);
+                      }}
+                      getOptionSelected={(option, value) =>
+                        option.name === value.title
+                      }
+                      getOptionLabel={(option) => option.title}
+                      options={top100Films}
+                      loading={loading}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Enter Synmptoms Here"
+                          variant="outlined"
+                          style={{ background: '#ffffff' }}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <React.Fragment>
+                                {loading ? (
+                                  <CircularProgress color="inherit" size={20} />
+                                ) : null}
+                                {params.InputProps.endAdornment}
+                              </React.Fragment>
+                            ),
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={2}
+                    container
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <SearchOutlined
+                      className="fa fa-plus-circle"
+                      style={{ color: 'white', fontSize: 35 }}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Paper>
+          </Paper>
+        </div>
+        <Card className="cards">
+          <CardContent>
+            <Typography
+              variant="h5"
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+            >
+              physician
+            </Typography>
+            <Typography variant="h5" component="div"></Typography>
+            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              adjective
+            </Typography>
+            <Typography variant="body2">
+              well meaning and kindly.
+              <br />
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small"></Button>
+          </CardActions>
+        </Card>
       </div>
     </div>
   );
@@ -158,36 +186,36 @@ export default function MedicoTriage() {
 
 // Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
+  { title: 'The Shawshank Redemption', year: 1994 },
+  { title: 'The Godfather', year: 1972 },
+  { title: 'The Godfather: Part II', year: 1974 },
+  { title: 'The Dark Knight', year: 2008 },
+  { title: '12 Angry Men', year: 1957 },
   { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-  { title: "The Lord of the Rings: The Return of the King", year: 2003 },
-  { title: "The Good, the Bad and the Ugly", year: 1966 },
-  { title: "Fight Club", year: 1999 },
-  { title: "The Lord of the Rings: The Fellowship of the Ring", year: 2001 },
-  { title: "Star Wars: Episode V - The Empire Strikes Back", year: 1980 },
-  { title: "Forrest Gump", year: 1994 },
-  { title: "Inception", year: 2010 },
-  { title: "The Lord of the Rings: The Two Towers", year: 2002 },
+  { title: 'Pulp Fiction', year: 1994 },
+  { title: 'The Lord of the Rings: The Return of the King', year: 2003 },
+  { title: 'The Good, the Bad and the Ugly', year: 1966 },
+  { title: 'Fight Club', year: 1999 },
+  { title: 'The Lord of the Rings: The Fellowship of the Ring', year: 2001 },
+  { title: 'Star Wars: Episode V - The Empire Strikes Back', year: 1980 },
+  { title: 'Forrest Gump', year: 1994 },
+  { title: 'Inception', year: 2010 },
+  { title: 'The Lord of the Rings: The Two Towers', year: 2002 },
   { title: "One Flew Over the Cuckoo's Nest", year: 1975 },
-  { title: "Goodfellas", year: 1990 },
-  { title: "The Matrix", year: 1999 },
-  { title: "Seven Samurai", year: 1954 },
-  { title: "Star Wars: Episode IV - A New Hope", year: 1977 },
-  { title: "City of God", year: 2002 },
-  { title: "Se7en", year: 1995 },
-  { title: "The Silence of the Lambs", year: 1991 },
+  { title: 'Goodfellas', year: 1990 },
+  { title: 'The Matrix', year: 1999 },
+  { title: 'Seven Samurai', year: 1954 },
+  { title: 'Star Wars: Episode IV - A New Hope', year: 1977 },
+  { title: 'City of God', year: 2002 },
+  { title: 'Se7en', year: 1995 },
+  { title: 'The Silence of the Lambs', year: 1991 },
   { title: "It's a Wonderful Life", year: 1946 },
-  { title: "Life Is Beautiful", year: 1997 },
-  { title: "The Usual Suspects", year: 1995 },
-  { title: "Léon: The Professional", year: 1994 },
-  { title: "Spirited Away", year: 2001 },
-  { title: "Saving Private Ryan", year: 1998 },
-  { title: "Once Upon a Time in the West", year: 1968 },
-  { title: "American History X", year: 1998 },
-  { title: "Interstellar", year: 2014 },
+  { title: 'Life Is Beautiful', year: 1997 },
+  { title: 'The Usual Suspects', year: 1995 },
+  { title: 'Léon: The Professional', year: 1994 },
+  { title: 'Spirited Away', year: 2001 },
+  { title: 'Saving Private Ryan', year: 1998 },
+  { title: 'Once Upon a Time in the West', year: 1968 },
+  { title: 'American History X', year: 1998 },
+  { title: 'Interstellar', year: 2014 },
 ];
