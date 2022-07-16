@@ -70,7 +70,7 @@ export default function Main(props) {
       <div
         style={{
           backgroundImage: `url(${bg})`,
-          // height: "100vh",
+          height: "100vh",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}

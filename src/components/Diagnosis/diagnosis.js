@@ -7,8 +7,16 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
-import { Card, CardContent, CardHeader, CardMedia } from "@material-ui/core";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  ListItemIcon,
+  ListItemSecondaryAction,
+} from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Icons from "@fortawesome/fontawesome-free-solid";
+import CircularProgressWithLabel from "../CircularProgressBar/CircularProgressBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,42 +28,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AlignItemsList() {
+export default function Diagnosis(props) {
+  console.log(props.values);
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} elevation={7}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            <FontAwesomeIcon icon="fas fa-diagnoses" />
-          </Avatar>
+          <FontAwesomeIcon icon={Icons.faDiagnoses} size="3x" color="#2196f3" />
         }
+        titleTypographyProps={{ variant: "h5" }}
         title="Diagnosis"
         subheader="Diagnosis classified based on symptoms "
       />
-
       <CardContent>
         <List className={classes.root}>
           <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-            </ListItemAvatar>
+            <ListItemIcon>
+              <FontAwesomeIcon
+                icon={Icons.faHandPointRight}
+                size="1x"
+                color="black"
+              />
+            </ListItemIcon>
             <ListItemText
+              onClick={() => alert("hi")}
               primary="Brunch this weekend?"
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.inline}
-                    color="textPrimary"
-                  >
-                    Ali Connors
-                  </Typography>
-                </React.Fragment>
-              }
             />
+            <ListItemSecondaryAction>
+              <CircularProgressWithLabel variant="determinate" value={75} />
+            </ListItemSecondaryAction>
           </ListItem>
           <Divider variant="inset" component="li" />
           <ListItem alignItems="flex-start">
@@ -64,18 +67,18 @@ export default function AlignItemsList() {
             </ListItemAvatar>
             <ListItemText
               primary="Summer BBQ"
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.inline}
-                    color="textPrimary"
-                  >
-                    to Scott, Alex, Jennifer
-                  </Typography>
-                </React.Fragment>
-              }
+              // secondary={
+              //   <React.Fragment>
+              //     <Typography
+              //       component="span"
+              //       variant="body2"
+              //       className={classes.inline}
+              //       color="textPrimary"
+              //     >
+              //       to Scott, Alex, Jennifer
+              //     </Typography>
+              //   </React.Fragment>
+              // }
             />
           </ListItem>
           <Divider variant="inset" component="li" />
@@ -83,21 +86,7 @@ export default function AlignItemsList() {
             <ListItemAvatar>
               <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
             </ListItemAvatar>
-            <ListItemText
-              primary="Oui Oui"
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    className={classes.inline}
-                    color="textPrimary"
-                  >
-                    Sandra Adams
-                  </Typography>
-                </React.Fragment>
-              }
-            />
+            <ListItemText primary="Oui Oui" />
           </ListItem>
         </List>
       </CardContent>

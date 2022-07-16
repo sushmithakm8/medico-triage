@@ -1,34 +1,19 @@
-// import React from "react";
-// import PropTypes from "prop-types";
-// import styles from "./Medico-triage.module.css";
-
-// const MedicoTriage = () => (
-//   <div className={styles.MedicoTriage}>Medico-triage Component</div>
-// );
-
-// MedicoTriage.propTypes = {};
-
-// MedicoTriage.defaultProps = {};
-
-// export default MedicoTriage;
-/* eslint-disable no-use-before-define */
-
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import "./Medico-triage.css";
 import {
+  Button,
   CircularProgress,
   Grid,
   makeStyles,
   Paper,
-  Tooltip,
 } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
-import AlignItemsList from "../Card/Card";
-// import SpeechRecognition, {
-//   useSpeechRecognition,
-// } from "react-speech-recognition";
+import Diagnosis from "../Diagnosis/diagnosis";
+import Speciality from "../Speciality/Speciality";
+import Investigation from "../Investigation/Investigation";
+import Treatment from "../Treatment/Treatment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,30 +40,20 @@ export default function MedicoTriage() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
+  const [allOptions, setallOptions] = React.useState([]);
+  const [showDiagnosis, setshowDiagnosis] = React.useState(false);
+  const [showResults, setshowResults] = React.useState(false);
+
   const loading = open && options.length === 0;
-
+  const res = {
+    a: "b",
+  };
   React.useEffect(() => {
-    let active = true;
-
     if (!loading) {
       return undefined;
     }
 
-    // (async () => {
-    //   const response = await fetch(
-    //     "https://country.register.gov.uk/records.json?page-size=5000"
-    //   );
-    //   // await sleep(1e3); // For demo purposes.
-    //   const countries = await response.json();
-
-    //   if (active) {
-    //     setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
-    //   }
-    // })();
-
-    return () => {
-      active = false;
-    };
+    return () => {};
   }, [loading]);
 
   React.useEffect(() => {
@@ -87,57 +62,42 @@ export default function MedicoTriage() {
     }
   }, [open]);
 
-  // const [message, setMessage] = useState("");
-  // const commands = [
-  //   {
-  //     command: "reset",
-  //     callback: () => resetTranscript(),
-  //   },
-  //   {
-  //     command: "shut up",
-  //     callback: () => setMessage("I wasn't talking."),
-  //   },
-  //   {
-  //     command: "Hello",
-  //     callback: () => setMessage("Hi there!"),
-  //   },
-  // ];
-  // const {
-  //   transcript,
-  //   interimTranscript,
-  //   finalTranscript,
-  //   resetTranscript,
-  //   listening,
-  // } = useSpeechRecognition({ commands });
-
-  // useEffect(() => {
-  //   if (finalTranscript !== "") {
-  //     console.log("Got final result:", finalTranscript);
-  //     setOpen(true);
-  //     document.getElementById("asynchronous").value = finalTranscript;
-  //   }
-  // }, [interimTranscript, finalTranscript]);
-
-  // if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
-  //   console.log(
-  //     "Your browser does not support speech recognition software! Try Chrome desktop, maybe?"
-  //   );
-  // }
-  // const listenContinuously = () => {
-  //   SpeechRecognition.startListening({
-  //     continuous: true,
-  //     language: "en-GB",
-  //   });
-  // };
   const onChangeHandle = async (value) => {
-    if (value.length > 2) {
-      const response = await fetch(
-        "https://country.register.gov.uk/records.json?page-size=5000"
-      );
+    setallOptions([]);
+    if (value.length > 1) {
+      const response = await fetch("http://10.189.197.13:3002/", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: value,
+      });
 
       const countries = await response.json();
-      setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
+      const finalResponse = [];
+      countries.res.forEach((element) => {
+        finalResponse.push({ title: element, value: element });
+      });
+      setallOptions(finalResponse);
     }
+  };
+
+  const getDiagnosis = async (selectedValue) => {
+    console.log(selectedValue);
+    setshowDiagnosis(true);
+    setshowResults(true);
+    // if (value.length > 1) {
+    //   const response = await fetch("http://10.189.197.13:3002/", {
+    //     method: "post",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: value,
+    //   });
+
+    //   const countries = await response.json();
+    //   const finalResponse = [];
+    //   countries.res.forEach((element) => {
+    //     finalResponse.push({ title: element, value: element });
+    //   });
+    //   setallOptions(finalResponse);
+    // }
   };
 
   return (
@@ -151,10 +111,13 @@ export default function MedicoTriage() {
                   <Grid item xs={10}>
                     <Autocomplete
                       id="asynchronous"
+                      noOptionsText={"No matches found"}
                       multiple
                       limitTags={3}
                       open={open}
-                      onChange={() => setOpen(true)}
+                      onChange={(event, selectedValue) =>
+                        getDiagnosis(selectedValue.value)
+                      } // You can get the `selectedValue` inside your handler function on every time user select some new value
                       onOpen={() => {
                         setOpen(true);
                       }}
@@ -165,8 +128,7 @@ export default function MedicoTriage() {
                         option.name === value.title
                       }
                       getOptionLabel={(option) => option.title}
-                      options={top100Films}
-                      loading={loading}
+                      options={allOptions}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -204,10 +166,12 @@ export default function MedicoTriage() {
                     alignItems="center"
                     justifyContent="center"
                   >
-                    <SearchOutlined
-                      className="fa fa-plus-circle"
-                      style={{ color: "white", fontSize: 35 }}
-                    />
+                    <Button onClick={getDiagnosis}>
+                      <SearchOutlined
+                        className="fa fa-plus-circle"
+                        style={{ color: "white", fontSize: 35 }}
+                      />
+                    </Button>
                   </Grid>
                 </Grid>
               </Grid>
@@ -218,64 +182,38 @@ export default function MedicoTriage() {
 
       <div
         className={classes.root}
-        style={{ marginTop: "15%", marginRight: "5%", marginLeft: "5%" }}
+        style={{ marginTop: "12%", marginRight: "5%", marginLeft: "5%" }}
       >
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper
-              className={classes.paper}
-              style={{ background: "none", boxShadow: "none" }}
-            >
-              <AlignItemsList />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <AlignItemsList />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <AlignItemsList />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <AlignItemsList />
-          </Grid>
+          {showDiagnosis ? (
+            <Grid item xs={12}>
+              <Paper
+                className={classes.paper}
+                style={{ background: "none", boxShadow: "none" }}
+              >
+                <Diagnosis values={res} />
+              </Paper>
+            </Grid>
+          ) : (
+            ""
+          )}
+          {showResults ? (
+            <>
+              <Grid item xs={12} sm={4}>
+                <Speciality />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Investigation />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <Treatment />
+              </Grid>{" "}
+            </>
+          ) : (
+            ""
+          )}
         </Grid>
       </div>
     </>
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-  { title: "The Godfather: Part II", year: 1974 },
-  { title: "The Dark Knight", year: 2008 },
-  { title: "12 Angry Men", year: 1957 },
-  { title: "Schindler's List", year: 1993 },
-  { title: "Pulp Fiction", year: 1994 },
-  { title: "The Lord of the Rings: The Return of the King", year: 2003 },
-  { title: "The Good, the Bad and the Ugly", year: 1966 },
-  { title: "Fight Club", year: 1999 },
-  { title: "The Lord of the Rings: The Fellowship of the Ring", year: 2001 },
-  { title: "Star Wars: Episode V - The Empire Strikes Back", year: 1980 },
-  { title: "Forrest Gump", year: 1994 },
-  { title: "Inception", year: 2010 },
-  { title: "The Lord of the Rings: The Two Towers", year: 2002 },
-  { title: "One Flew Over the Cuckoo's Nest", year: 1975 },
-  { title: "Goodfellas", year: 1990 },
-  { title: "The Matrix", year: 1999 },
-  { title: "Seven Samurai", year: 1954 },
-  { title: "Star Wars: Episode IV - A New Hope", year: 1977 },
-  { title: "City of God", year: 2002 },
-  { title: "Se7en", year: 1995 },
-  { title: "The Silence of the Lambs", year: 1991 },
-  { title: "It's a Wonderful Life", year: 1946 },
-  { title: "Life Is Beautiful", year: 1997 },
-  { title: "The Usual Suspects", year: 1995 },
-  { title: "Léon: The Professional", year: 1994 },
-  { title: "Spirited Away", year: 2001 },
-  { title: "Saving Private Ryan", year: 1998 },
-  { title: "Once Upon a Time in the West", year: 1968 },
-  { title: "American History X", year: 1998 },
-  { title: "Interstellar", year: 2014 },
-];
