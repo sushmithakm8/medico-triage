@@ -14,27 +14,22 @@
 /* eslint-disable no-use-before-define */
 
 import React from "react";
-import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
 import "./Medico-triage.css";
 import {
-  Box,
-  ButtonBase,
   CircularProgress,
-  Container,
   Grid,
   makeStyles,
   Paper,
-  Typography,
+  Tooltip,
 } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
-import { blue } from "@material-ui/core/colors";
+import AlignItemsList from "../Card/Card";
+// import SpeechRecognition, {
+//   useSpeechRecognition,
+// } from "react-speech-recognition";
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -55,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "100%",
   },
 }));
+
 export default function MedicoTriage() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -68,17 +64,17 @@ export default function MedicoTriage() {
       return undefined;
     }
 
-    (async () => {
-      const response = await fetch(
-        "https://country.register.gov.uk/records.json?page-size=5000"
-      );
-      // await sleep(1e3); // For demo purposes.
-      const countries = await response.json();
+    // (async () => {
+    //   const response = await fetch(
+    //     "https://country.register.gov.uk/records.json?page-size=5000"
+    //   );
+    //   // await sleep(1e3); // For demo purposes.
+    //   const countries = await response.json();
 
-      if (active) {
-        setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
-      }
-    })();
+    //   if (active) {
+    //     setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
+    //   }
+    // })();
 
     return () => {
       active = false;
@@ -90,69 +86,161 @@ export default function MedicoTriage() {
       setOptions([]);
     }
   }, [open]);
+
+  // const [message, setMessage] = useState("");
+  // const commands = [
+  //   {
+  //     command: "reset",
+  //     callback: () => resetTranscript(),
+  //   },
+  //   {
+  //     command: "shut up",
+  //     callback: () => setMessage("I wasn't talking."),
+  //   },
+  //   {
+  //     command: "Hello",
+  //     callback: () => setMessage("Hi there!"),
+  //   },
+  // ];
+  // const {
+  //   transcript,
+  //   interimTranscript,
+  //   finalTranscript,
+  //   resetTranscript,
+  //   listening,
+  // } = useSpeechRecognition({ commands });
+
+  // useEffect(() => {
+  //   if (finalTranscript !== "") {
+  //     console.log("Got final result:", finalTranscript);
+  //     setOpen(true);
+  //     document.getElementById("asynchronous").value = finalTranscript;
+  //   }
+  // }, [interimTranscript, finalTranscript]);
+
+  // if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+  //   console.log(
+  //     "Your browser does not support speech recognition software! Try Chrome desktop, maybe?"
+  //   );
+  // }
+  // const listenContinuously = () => {
+  //   SpeechRecognition.startListening({
+  //     continuous: true,
+  //     language: "en-GB",
+  //   });
+  // };
+  const onChangeHandle = async (value) => {
+    if (value.length > 2) {
+      const response = await fetch(
+        "https://country.register.gov.uk/records.json?page-size=5000"
+      );
+
+      const countries = await response.json();
+      setOptions(Object.keys(countries).map((key) => countries[key].item[0]));
+    }
+  };
+
   return (
-    <div className="head">
-      <div className={classes.root}>
-        <Paper className={classes.paper} style={{ background: "#3f50b5" }}>
-          <Grid container spacing={1}>
-            <Grid item xs={12} sm container>
-              <Grid item xs container>
-                <Grid item xs={10}>
-                  <Autocomplete
-                    id="asynchronous-demo"
-                    multiple
-                    open={open}
-                    onOpen={() => {
-                      setOpen(true);
-                    }}
-                    onClose={() => {
-                      setOpen(false);
-                    }}
-                    getOptionSelected={(option, value) =>
-                      option.name === value.title
-                    }
-                    getOptionLabel={(option) => option.title}
-                    options={top100Films}
-                    loading={loading}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="Enter Synmptoms Here"
-                        variant="outlined"
-                        style={{ background: "#ffffff" }}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <React.Fragment>
-                              {loading ? (
-                                <CircularProgress color="inherit" size={20} />
-                              ) : null}
-                              {params.InputProps.endAdornment}
-                            </React.Fragment>
-                          ),
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={2}
-                  container
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <SearchOutlined
-                    className="fa fa-plus-circle"
-                    style={{ color: "white", fontSize: 35 }}
-                  />
+    <>
+      <div className="head">
+        <div className={classes.root}>
+          <Paper className={classes.paper} style={{ background: "#3f50b5" }}>
+            <Grid container spacing={1}>
+              <Grid item xs={12} sm container>
+                <Grid item xs container>
+                  <Grid item xs={10}>
+                    <Autocomplete
+                      id="asynchronous"
+                      multiple
+                      limitTags={3}
+                      open={open}
+                      onChange={() => setOpen(true)}
+                      onOpen={() => {
+                        setOpen(true);
+                      }}
+                      onClose={() => {
+                        setOpen(false);
+                      }}
+                      getOptionSelected={(option, value) =>
+                        option.name === value.title
+                      }
+                      getOptionLabel={(option) => option.title}
+                      options={top100Films}
+                      loading={loading}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder="Enter Symptoms Here...."
+                          variant="outlined"
+                          style={{ background: "#ffffff" }}
+                          onChange={(ev) => {
+                            // dont fire API if the user delete or not entered anything
+                            if (
+                              ev.target.value !== "" ||
+                              ev.target.value !== null
+                            ) {
+                              onChangeHandle(ev.target.value);
+                            }
+                          }}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <React.Fragment>
+                                {loading ? (
+                                  <CircularProgress color="inherit" size={20} />
+                                ) : null}
+                                {params.InputProps.endAdornment}
+                              </React.Fragment>
+                            ),
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={2}
+                    container
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <SearchOutlined
+                      className="fa fa-plus-circle"
+                      style={{ color: "white", fontSize: 35 }}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Paper>
+          </Paper>
+        </div>
       </div>
-    </div>
+
+      <div
+        className={classes.root}
+        style={{ marginTop: "15%", marginRight: "5%", marginLeft: "5%" }}
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper
+              className={classes.paper}
+              style={{ background: "none", boxShadow: "none" }}
+            >
+              <AlignItemsList />
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <AlignItemsList />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <AlignItemsList />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <AlignItemsList />
+          </Grid>
+        </Grid>
+      </div>
+    </>
   );
 }
 

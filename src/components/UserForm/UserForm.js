@@ -17,12 +17,8 @@ import {
   Grid,
   TextField,
 } from "@material-ui/core";
-import Snackbar from "@material-ui/core/Snackbar";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
-import IconButton from "@material-ui/core/IconButton";
-import ErrorIcon from "@material-ui/icons/Error";
-import CloseIcon from "@material-ui/icons/Close";
-import { LocalHospitalRounded, LocalHospitalSharp } from "@material-ui/icons";
+
+import { LocalHospitalRounded } from "@material-ui/icons";
 import { blue } from "@material-ui/core/colors";
 
 class Registration extends Component {
@@ -37,6 +33,7 @@ class Registration extends Component {
     errorOpen: false,
     showPage: false,
   };
+
   errorClose = (e) => {
     this.setState({
       errorOpen: false,
@@ -48,6 +45,8 @@ class Registration extends Component {
     this.setState({
       [name]: e.target.value,
     });
+
+    localStorage.setItem([name], e.target.value);
   };
 
   calculateAge = (dob) => (e) => {
@@ -64,12 +63,6 @@ class Registration extends Component {
     });
   };
 
-  passwordMatch = () => this.state.password === this.state.passwordConfrim;
-
-  showPassword = () => {
-    this.setState((prevState) => ({ hidePassword: !prevState.hidePassword }));
-  };
-
   isValid = () => {
     if (this.state.email === "") {
       return false;
@@ -78,12 +71,11 @@ class Registration extends Component {
   };
 
   submitRegistration = (e) => {
-    if (this.state.firstName !== "" && this.state.lastName !== "") {
-      this.setState({ showPage: true });
-    }
+    // localStorage.setItem("PatientInfo", this.state);
   };
 
   render() {
+    localStorage.clear();
     const { classes } = this.props;
 
     return (
@@ -101,11 +93,10 @@ class Registration extends Component {
           <form className={classes.form}>
             <Grid item container spacing={1} justify="center">
               <Grid item xs={12} sm={6} md={6}>
-                <FormControl required fullWidth margin="normal">
+                <FormControl fullWidth margin="normal">
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="firstName"
                     label="First Name"
@@ -116,11 +107,10 @@ class Registration extends Component {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
-                <FormControl required fullWidth margin="normal">
+                <FormControl fullWidth margin="normal">
                   <TextField
                     variant="outlined"
                     margin="normal"
-                    required
                     fullWidth
                     id="lastName"
                     label="Last Name"

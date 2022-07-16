@@ -4,7 +4,7 @@ import Container from "@material-ui/core/Container";
 import UserForm from "../UserForm/UserForm";
 export default function MainContent(props) {
   return (
-    <Container>
+    <Container style={{ height: "90vh" }}>
       <Box my={2}>
         <UserForm />
       </Box>

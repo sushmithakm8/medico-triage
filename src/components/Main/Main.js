@@ -11,6 +11,7 @@ import MainContent from "../MainContent/MainContent";
 import Header from "../Header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MedicoTriage from "../Medico-triage/Medico-triage";
+import bg from "../../assets/img/main-modified.webp";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,8 +69,8 @@ export default function Main(props) {
       <Header></Header>
       <div
         style={{
-          backgroundImage: `url("https://startupbox.online/wp-content/uploads/sites/26/2022/06/hms1-1-1.jpg")`,
-          height: "100vh",
+          backgroundImage: `url(${bg})`,
+          // height: "100vh",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
