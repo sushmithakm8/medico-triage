@@ -12,6 +12,7 @@ import Header from "../Header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MedicoTriage from "../Medico-triage/Medico-triage";
 import bg from "../../assets/img/main-modified.webp";
+import { Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +68,7 @@ export default function Main(props) {
     <React.Fragment>
       <CssBaseline />
       <Header></Header>
+
       <div
         style={{
           backgroundImage: `url(${bg})`,
@@ -76,7 +78,6 @@ export default function Main(props) {
         }}
       >
         <Toolbar id="back-to-top-anchor" />
-
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainContent />} />

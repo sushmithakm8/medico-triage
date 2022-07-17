@@ -13,6 +13,7 @@ import {
   CardHeader,
   ListItemIcon,
   ListItemSecondaryAction,
+  Paper,
 } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Icons from "@fortawesome/fontawesome-free-solid";
@@ -29,9 +30,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Diagnosis(props) {
-  console.log(props.values);
   const classes = useStyles();
-
+  const passData = (diagnosis) => {
+    props.getResult(diagnosis);
+  };
   return (
     <Card className={classes.root} elevation={7}>
       <CardHeader
@@ -39,56 +41,59 @@ export default function Diagnosis(props) {
           <FontAwesomeIcon icon={Icons.faDiagnoses} size="3x" color="#2196f3" />
         }
         titleTypographyProps={{ variant: "h5" }}
-        title="Diagnosis"
-        subheader="Diagnosis classified based on symptoms "
+        title="Probable Diagnosis"
+        subheader="This is only the probable diagnosis based on symptoms provided. Please visit the doctor (in-person or virtual) for a diagnosis and interventions."
       />
       <CardContent>
-        <List className={classes.root}>
-          <ListItem alignItems="flex-start">
-            <ListItemIcon>
-              <FontAwesomeIcon
-                icon={Icons.faHandPointRight}
-                size="1x"
-                color="black"
+        <Paper style={{ maxHeight: 200, overflow: "auto" }} elevation={0}>
+          <List className={classes.root}>
+            <ListItem
+              alignItems="flex-start"
+              button
+              onClick={() => passData("sgdvhjasdvjhk")}
+            >
+              <ListItemIcon>
+                <FontAwesomeIcon
+                  icon={Icons.faHandPointRight}
+                  size="1x"
+                  color="black"
+                />
+              </ListItemIcon>
+              <ListItemText primary="Brunch this weekend?" />
+              <ListItemSecondaryAction>
+                <CircularProgressWithLabel variant="determinate" value={75} />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+              </ListItemAvatar>
+              <ListItemText
+                primary="Summer BBQ"
+                // secondary={
+                //   <React.Fragment>
+                //     <Typography
+                //       component="span"
+                //       variant="body2"
+                //       className={classes.inline}
+                //       color="textPrimary"
+                //     >
+                //       to Scott, Alex, Jennifer
+                //     </Typography>
+                //   </React.Fragment>
+                // }
               />
-            </ListItemIcon>
-            <ListItemText
-              onClick={() => alert("hi")}
-              primary="Brunch this weekend?"
-            />
-            <ListItemSecondaryAction>
-              <CircularProgressWithLabel variant="determinate" value={75} />
-            </ListItemSecondaryAction>
-          </ListItem>
-          <Divider variant="inset" component="li" />
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-            </ListItemAvatar>
-            <ListItemText
-              primary="Summer BBQ"
-              // secondary={
-              //   <React.Fragment>
-              //     <Typography
-              //       component="span"
-              //       variant="body2"
-              //       className={classes.inline}
-              //       color="textPrimary"
-              //     >
-              //       to Scott, Alex, Jennifer
-              //     </Typography>
-              //   </React.Fragment>
-              // }
-            />
-          </ListItem>
-          <Divider variant="inset" component="li" />
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-            </ListItemAvatar>
-            <ListItemText primary="Oui Oui" />
-          </ListItem>
-        </List>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+              </ListItemAvatar>
+              <ListItemText primary="Oui Oui" />
+            </ListItem>
+          </List>
+        </Paper>
       </CardContent>
     </Card>
   );

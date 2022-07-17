@@ -45,9 +45,7 @@ export default function MedicoTriage() {
   const [showResults, setshowResults] = React.useState(false);
 
   const loading = open && options.length === 0;
-  const res = {
-    a: "b",
-  };
+
   React.useEffect(() => {
     if (!loading) {
       return undefined;
@@ -83,6 +81,24 @@ export default function MedicoTriage() {
   const getDiagnosis = async (selectedValue) => {
     console.log(selectedValue);
     setshowDiagnosis(true);
+    // if (value.length > 1) {
+    //   const response = await fetch("http://10.189.197.13:3002/", {
+    //     method: "post",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: value,
+    //   });
+
+    //   const countries = await response.json();
+    //   const finalResponse = [];
+    //   countries.res.forEach((element) => {
+    //     finalResponse.push({ title: element, value: element });
+    //   });
+    //   setallOptions(finalResponse);
+    // }
+  };
+
+  const getResult = async (value) => {
+    console.log(value);
     setshowResults(true);
     // if (value.length > 1) {
     //   const response = await fetch("http://10.189.197.13:3002/", {
@@ -191,7 +207,7 @@ export default function MedicoTriage() {
                 className={classes.paper}
                 style={{ background: "none", boxShadow: "none" }}
               >
-                <Diagnosis values={res} />
+                <Diagnosis values={"abc"} getResult={getResult} />
               </Paper>
             </Grid>
           ) : (

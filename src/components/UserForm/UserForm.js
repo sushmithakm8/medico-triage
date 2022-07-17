@@ -16,6 +16,7 @@ import {
   RadioGroup,
   Grid,
   TextField,
+  Typography,
 } from "@material-ui/core";
 
 import { LocalHospitalRounded } from "@material-ui/icons";
@@ -75,7 +76,6 @@ class Registration extends Component {
   };
 
   render() {
-    localStorage.clear();
     const { classes } = this.props;
 
     return (
@@ -89,6 +89,10 @@ class Registration extends Component {
               style={{ color: blue[500], fontSize: 30 }}
             />
           </Avatar>
+
+          <Typography variant="h6" gutterBottom>
+            Add Patient Details
+          </Typography>
 
           <form className={classes.form}>
             <Grid item container spacing={1} justify="center">
