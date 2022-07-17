@@ -1,20 +1,20 @@
-import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import './Medico-triage.css';
+import React from "react";
+import TextField from "@material-ui/core/TextField";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import "./Medico-triage.css";
 import {
   Button,
   CircularProgress,
   Grid,
   makeStyles,
   Paper,
-} from '@material-ui/core';
-import { SearchOutlined } from '@material-ui/icons';
-import Diagnosis from '../Diagnosis/diagnosis';
-import Speciality from '../Speciality/Speciality';
-import Investigation from '../Investigation/Investigation';
-import Treatment from '../Treatment/Treatment';
-import { getDefaultNormalizer } from '@testing-library/react';
+} from "@material-ui/core";
+import { SearchOutlined } from "@material-ui/icons";
+import Diagnosis from "../Diagnosis/diagnosis";
+import Speciality from "../Speciality/Speciality";
+import Investigation from "../Investigation/Investigation";
+import Treatment from "../Treatment/Treatment";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    margin: 'auto',
+    margin: "auto",
     maxWidth: 700,
   },
   image: {
@@ -30,27 +30,26 @@ const useStyles = makeStyles((theme) => ({
     height: 128,
   },
   img: {
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
+    margin: "auto",
+    display: "block",
+    maxWidth: "100%",
+    maxHeight: "100%",
   },
 }));
 
 export default function MedicoTriage() {
   const classes = useStyles();
+  const [role, setRole] = React.useState(
+    window.location.href.substring(window.location.href.lastIndexOf("/") + 1)
+  );
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
   const [allOptions, setallOptions] = React.useState([]);
   const [showDiagnosis, setshowDiagnosis] = React.useState(false);
+  const [dia, setDiagnosis] = React.useState([]);
   const [showResults, setshowResults] = React.useState(false);
   const [result, setResult] = React.useState({});
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [isLoadingSpeciality, setIsLoadingSpeciality] = React.useState(true);
-  const [isLoadingInvestigation, setIsLoadingInvestigation] =
-    React.useState(true);
-  const [isLoadingTreatment, setIsLoadingTreatment] = React.useState(true);
-
+  const [selected, setSelected] = React.useState([]);
   const loading = open && options.length === 0;
 
   React.useEffect(() => {
@@ -69,7 +68,7 @@ export default function MedicoTriage() {
 
   const onChangeHandle = async (value) => {
     setallOptions([]);
-    if (value.length > 2) {
+    if (value.length > 1) {
       const response = await fetch(
         "https://intelli-search-csh.herokuapp.com/autopredict",
         {
@@ -91,89 +90,83 @@ export default function MedicoTriage() {
     }
   };
 
-  const getDiagnosis = async (selectedValue) => {
-    console.log(selectedValue);
-    setshowDiagnosis(true);
-    // if (value.length > 1) {
-    //   const response = await fetch("http://10.189.197.13:3002/", {
-    //     method: "post",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: value,
-    //   });
+  const getDiagnosis = async () => {
+    if (selected.length === 0) {
+      setshowDiagnosis(false);
+      setshowResults(false);
+    } else {
+      let value = [];
+      selected.forEach((element) => {
+        value.push(element.value);
+      });
+      if (value.length > 1) {
+        const response = await fetch(
+          "https://diagnosis-prediction-model.herokuapp.com/diagnoisPrediction",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ symptoms: value }),
+          }
+        );
 
-    //   const countries = await response.json();
-    //   const finalResponse = [];
-    //   countries.res.forEach((element) => {
-    //     finalResponse.push({ title: element, value: element });
-    //   });
-    //   setallOptions(finalResponse);
-    // }
+        const resDiagnosis = await response.json();
+
+        setshowDiagnosis(true);
+        setDiagnosis(resDiagnosis.predicted_diagnosis);
+      }
+    }
   };
 
   const getResult = async (value) => {
     console.log(value);
-    setshowResults(true);
-    // if (value.length > 1) {
-    //   const response = await fetch("http://10.189.197.13:3002/", {
-    //     method: "post",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: value,
-    //   });
 
-    //   const countries = await response.json();
-    //   const finalResponse = [];
-    //   countries.res.forEach((element) => {
-    //     finalResponse.push({ title: element, value: element });
-    //   });
-    //   setallOptions(finalResponse);
-    // }
-    let response;
-    try {
-      // response = await axios.get(`url`);
-      response = {
-        possibleDiagnosis: [
-          { value: 'Pulmonary Tuberculosis', probability: '78' },
-          { value: 'xyz', probability: '54' },
-          { value: 'abc', probability: '90' },
-          { value: 'lmn', probability: '12' },
-          { value: 'opq', probability: '33' },
-        ],
-        possibleSpeciality: ['abc', 'mno'],
-        possibleInvestigation: ['Chest X-ray', 'CT Scan'],
-        possibleTreatment: ['Pyrazinamide', 'Rifampicin'],
-      };
-    } catch (error) {
-      setIsLoading(false);
-      setIsLoadingSpeciality(false);
-      setIsLoadingInvestigation(false);
-      setIsLoadingTreatment(false);
-      return;
+    const response = await fetch(
+      "https://diagnosis-prediction-model.herokuapp.com/recommendationBasisDiagnosis",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ diagnosis: [value] }),
+      }
+    );
+    const resFinalRes = await response.json();
+
+    // const resFinalRes = {
+    //   investigation: ["Chest X-ray", "Gene-Xpert (CBNAAT)", "CT Scan"],
+    //   treatment: ["Isoniazid"],
+    //   department: ["General Medicine"],
+    // }; //await response.json();
+    setshowResults(true);
+    if (resFinalRes.recommendation === "no recommendation") {
+      setResult([]);
+    } else {
+      setResult(resFinalRes.recommendation);
     }
-    setResult(response);
-    setIsLoading(false);
-    setIsLoadingSpeciality(false);
-    setIsLoadingInvestigation(false);
-    setIsLoadingTreatment(false);
   };
 
   return (
     <>
       <div className="head">
         <div className={classes.root}>
-          <Paper className={classes.paper} style={{ background: '#3f50b5' }}>
+          <Paper className={classes.paper} style={{ background: "#3f50b5" }}>
             <Grid container spacing={1}>
               <Grid item xs={12} sm container>
                 <Grid item xs container>
                   <Grid item xs={10}>
                     <Autocomplete
                       id="asynchronous"
-                      noOptionsText={'No matches found'}
+                      noOptionsText={"No matches found"}
                       multiple
                       limitTags={3}
                       open={open}
-                      onChange={(event, selectedValue) =>
-                        getDiagnosis(selectedValue.value)
-                      } // You can get the `selectedValue` inside your handler function on every time user select some new value
+                      onChange={(event, selectedValue) => {
+                        setSelected(selectedValue);
+                        setshowDiagnosis(false);
+                        setshowResults(false);
+                      }}
                       onOpen={() => {
                         setOpen(true);
                       }}
@@ -190,11 +183,11 @@ export default function MedicoTriage() {
                           {...params}
                           placeholder="Enter Symptoms Here...."
                           variant="outlined"
-                          style={{ background: '#ffffff' }}
+                          style={{ background: "#ffffff" }}
                           onChange={(ev) => {
                             // dont fire API if the user delete or not entered anything
                             if (
-                              ev.target.value !== '' ||
+                              ev.target.value !== "" ||
                               ev.target.value !== null
                             ) {
                               onChangeHandle(ev.target.value);
@@ -225,7 +218,7 @@ export default function MedicoTriage() {
                     <Button onClick={getDiagnosis}>
                       <SearchOutlined
                         className="fa fa-plus-circle"
-                        style={{ color: 'white', fontSize: 35 }}
+                        style={{ color: "white", fontSize: 35 }}
                       />
                     </Button>
                   </Grid>
@@ -238,64 +231,54 @@ export default function MedicoTriage() {
 
       <div
         className={classes.root}
-        style={{ marginTop: '12%', marginRight: '5%', marginLeft: '5%' }}
+        style={{ marginTop: "10%", marginRight: "5%", marginLeft: "5%" }}
       >
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justify="center">
           {showDiagnosis ? (
             <Grid item xs={12}>
               <Paper
                 className={classes.paper}
-                style={{ background: 'none', boxShadow: 'none' }}
+                style={{ background: "none", boxShadow: "none" }}
               >
-                {isLoading ? (
-                  <div className="spinner-border text-primary" role="status">
-                    {' '}
-                    <span className="sr-only">Loading...</span>{' '}
-                  </div>
-                ) : (
-                  <Diagnosis values={result.possibleDiagnosis} />
-                )}
-                //<Diagnosis values={"abc"} getResult={getResult} />
+                <Diagnosis values={dia} getResult={getResult} />
               </Paper>
             </Grid>
           ) : (
-            ''
+            ""
           )}
           {showResults ? (
             <>
-              <Grid item xs={12} sm={4}>
-                {isLoadingSpeciality ? (
-                  <div className="spinner-border text-primary" role="status">
-                    {' '}
-                    <span className="sr-only">Loading...</span>{' '}
-                  </div>
-                ) : (
-                  <Speciality values={result.possibleSpeciality} />
-                )}
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                {isLoadingInvestigation ? (
-                  <div className="spinner-border text-primary" role="status">
-                    {' '}
-                    <span className="sr-only">Loading...</span>{' '}
-                  </div>
-                ) : (
-                  <Investigation values={result.possibleInvestigation} />
-                )}
-              </Grid>
-              <Grid item xs={12} sm={4}>
-                {isLoadingTreatment ? (
-                  <div className="spinner-border text-primary" role="status">
-                    {' '}
-                    <span className="sr-only">Loading...</span>{' '}
-                  </div>
-                ) : (
-                  <Treatment values={result.possibleTreatment} />
-                )}
-              </Grid>{' '}
+              {role === "patient" || role === "nurse" ? (
+                <Grid item xs={12} sm={4}>
+                  <Speciality
+                    values={"department" in result ? result.department : []}
+                  />
+                </Grid>
+              ) : (
+                ""
+              )}
+              {role === "doctor" || role === "nurse" ? (
+                <>
+                  <Grid item xs={12} sm={4}>
+                    <Investigation
+                      values={
+                        "investigation" in result ? result.investigation : []
+                      }
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={4}>
+                    <Treatment
+                      values={"treatment" in result ? result.treatment : []}
+                    />
+                  </Grid>
+                </>
+              ) : (
+                ""
+              )}
             </>
           ) : (
-            ''
+            ""
           )}
         </Grid>
       </div>
