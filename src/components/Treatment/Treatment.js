@@ -53,11 +53,12 @@ export default function Treatment() {
                 />
               </ListItemIcon>
               <ListItemText
-                onClick={() => alert("hi")}
+                onClick={() => alert("Place order")}
                 primary="Brunch this weekend?"
               />
               <ListItemSecondaryAction>
                 <Button
+                  onClick={() => alert("Place order")}
                   variant="outlined"
                   size="small"
                   color="primary"

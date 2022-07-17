@@ -62,16 +62,22 @@ export default function MedicoTriage() {
 
   const onChangeHandle = async (value) => {
     setallOptions([]);
-    if (value.length > 1) {
-      const response = await fetch("http://10.189.197.13:3002/", {
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: value,
-      });
+    if (value.length > 2) {
+      const response = await fetch(
+        "https://intelli-search-csh.herokuapp.com/autopredict",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": "intelli-search-csh",
+          },
+          body: JSON.stringify({ text: value, text_type: "symptoms" }),
+        }
+      );
 
-      const countries = await response.json();
+      const symptoms = await response.json();
       const finalResponse = [];
-      countries.res.forEach((element) => {
+      symptoms.predicted_words.forEach((element) => {
         finalResponse.push({ title: element, value: element });
       });
       setallOptions(finalResponse);

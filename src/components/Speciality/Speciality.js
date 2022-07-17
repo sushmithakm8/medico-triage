@@ -53,11 +53,12 @@ export default function Speciality(props) {
                 />
               </ListItemIcon>
               <ListItemText
-                onClick={() => alert("hi")}
+                onClick={() => alert("Book an Appointmnet")}
                 primary="Brunch this weekend?"
               />
               <ListItemSecondaryAction>
                 <Button
+                  onClick={() => alert("Book an Appointmnet")}
                   variant="outlined"
                   size="small"
                   color="primary"

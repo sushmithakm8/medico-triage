@@ -69,21 +69,7 @@ export default function Diagnosis(props) {
               <ListItemAvatar>
                 <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
               </ListItemAvatar>
-              <ListItemText
-                primary="Summer BBQ"
-                // secondary={
-                //   <React.Fragment>
-                //     <Typography
-                //       component="span"
-                //       variant="body2"
-                //       className={classes.inline}
-                //       color="textPrimary"
-                //     >
-                //       to Scott, Alex, Jennifer
-                //     </Typography>
-                //   </React.Fragment>
-                // }
-              />
+              <ListItemText primary="Summer BBQ" />
             </ListItem>
             <Divider variant="inset" component="li" />
             <ListItem alignItems="flex-start">

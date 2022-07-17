@@ -12,7 +12,6 @@ import Header from "../Header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MedicoTriage from "../Medico-triage/Medico-triage";
 import bg from "../../assets/img/main-modified.webp";
-import { Grid, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -40,7 +40,7 @@ export default function Investigation(props) {
         }
         titleTypographyProps={{ variant: "h5" }}
         title="Recommended interventions"
-        subheader="Interventions (lab tests) recommendations based on symptoms "
+        subheader="Interventions (lab tests) recommendations based on diagnosis "
       />
       <CardContent>
         <Paper style={{ maxHeight: 200, overflow: "auto" }} elevation={0}>
@@ -50,6 +50,7 @@ export default function Investigation(props) {
                 <FontAwesomeIcon icon={Icons.faVial} size="1x" color="black" />
               </ListItemIcon>
               <ListItemText
+                onClick={() => alert("Order lab test")}
                 id="switch-list-label-bluetooth"
                 primary="Bluetooth"
               />
@@ -59,6 +60,7 @@ export default function Investigation(props) {
                   size="small"
                   color="primary"
                   className={classes.button}
+                  onClick={() => alert("Order lab test")}
                 >
                   Add Lab test
                 </Button>
