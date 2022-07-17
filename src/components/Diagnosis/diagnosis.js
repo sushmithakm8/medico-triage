@@ -30,17 +30,22 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Diagnosis(props) {
   const data = props.values;
-  const classes = useStyles();
 
+  const classes = useStyles();
+  const passData = (diagnosis) => {
+    props.getResult(diagnosis);
+  };
   return (
     <Card className={classes.root} elevation={7}>
       <CardHeader
         avatar={
           <FontAwesomeIcon icon={Icons.faDiagnoses} size="3x" color="#2196f3" />
         }
-        titleTypographyProps={{ variant: 'h5' }}
+
+        titleTypographyProps={{ variant: "h5" }}
         title="Probable Diagnosis"
-        subheader="Diagnosis classified based on symptoms "
+        subheader="This is only the probable diagnosis based on symptoms provided. Please visit the doctor (in-person or virtual) for a diagnosis and interventions."
+ 
       />
       <CardContent>
         <List className={classes.root}>

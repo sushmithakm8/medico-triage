@@ -13,9 +13,10 @@ import {
   CardHeader,
   ListItemIcon,
   ListItemSecondaryAction,
-} from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as Icons from '@fortawesome/fontawesome-free-solid';
+  Paper,
+} from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Icons from "@fortawesome/fontawesome-free-solid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,18 +38,20 @@ export default function Treatment(props) {
         avatar={
           <FontAwesomeIcon icon={Icons.faMedkit} size="3x" color="#009688" />
         }
-        titleTypographyProps={{ variant: 'h5' }}
-        title="Treatment"
-        subheader="Treatments suggestions based on diagnosis"
+       titleTypographyProps={{ variant: "h5" }}
+        title="Recommended Treatment"
+        subheader="Treatment recommendations based on diagnosis"
       />
       <CardContent>
+              <Paper style={{ maxHeight: 200, overflow: "auto" }} elevation={0}>
+
         <List className={classes.root}>
           <ListItem alignItems="flex-start">
             <ListItemIcon>
               <FontAwesomeIcon icon={Icons.faTablets} size="1x" color="black" />
             </ListItemIcon>
             <ListItemText
-              onClick={() => alert('hi')}
+                onClick={() => alert("Place order")}
               primary="Brunch this weekend?"
             />
             <ListItemSecondaryAction>
@@ -81,6 +84,8 @@ export default function Treatment(props) {
             </div>
           ))}
         </List>
+
+        </Paper>
       </CardContent>
     </Card>
   );

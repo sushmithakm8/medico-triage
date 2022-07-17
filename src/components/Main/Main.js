@@ -67,6 +67,7 @@ export default function Main(props) {
     <React.Fragment>
       <CssBaseline />
       <Header></Header>
+
       <div
         style={{
           backgroundImage: `url(${bg})`,
@@ -76,7 +77,6 @@ export default function Main(props) {
         }}
       >
         <Toolbar id="back-to-top-anchor" />
-
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<MainContent />} />

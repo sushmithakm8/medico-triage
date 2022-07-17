@@ -15,9 +15,10 @@ import {
   Icon,
   ListItemIcon,
   ListItemSecondaryAction,
-} from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as Icons from '@fortawesome/fontawesome-free-solid';
+  Paper,
+} from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Icons from "@fortawesome/fontawesome-free-solid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,22 +38,29 @@ export default function Speciality(props) {
     <Card className={classes.root} elevation={7}>
       <CardHeader
         avatar={<FontAwesomeIcon icon={Icons.faHospital} size="3x" />}
-        titleTypographyProps={{ variant: 'h5' }}
-        title="Speciality"
-        subheader="Showing the suggestions based on the diagnosis"
+
+        titleTypographyProps={{ variant: "h5" }}
+        title="Recommended Speciality"
+        subheader="Showing recommendations based on the diagnosis"
       />
       <CardContent>
-        <List className={classes.root}>
-          <ListItem alignItems="flex-start">
-            <ListItemIcon>
-              <FontAwesomeIcon
-                icon={Icons.faStethoscope}
-                size="1x"
-                color="black"
+        <Paper style={{ maxHeight: 200, overflow: "auto" }} elevation={0}>
+          <List className={classes.root}>
+            <ListItem alignItems="flex-start" button>
+              <ListItemIcon>
+                <FontAwesomeIcon
+                  icon={Icons.faStethoscope}
+                  size="1x"
+                  color="black"
+                />
+              </ListItemIcon>
+              <ListItemText
+                onClick={() => alert("Book an Appointmnet")}
+                primary="Brunch this weekend?"
               />
             </ListItemIcon>
             <ListItemText
-              onClick={() => alert('hi')}
+                  onClick={() => alert("Book an Appointmnet")}
               primary="Brunch this weekend?"
             />
             <ListItemSecondaryAction>
@@ -85,6 +93,7 @@ export default function Speciality(props) {
             </div>
           ))}
         </List>
+        </Paper>
       </CardContent>
     </Card>
   );

@@ -14,9 +14,10 @@ import {
   CardHeader,
   ListItemIcon,
   ListItemSecondaryAction,
-} from '@material-ui/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as Icons from '@fortawesome/fontawesome-free-solid';
+  Paper,
+} from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Icons from "@fortawesome/fontawesome-free-solid";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,11 +39,13 @@ export default function Investigation(props) {
         avatar={
           <FontAwesomeIcon icon={Icons.faFlask} size="3x" color="#673ab7" />
         }
-        titleTypographyProps={{ variant: 'h5' }}
-        title="Investigation"
-        subheader="Investigation (lab tests) suggestions based on symptoms "
+        titleTypographyProps={{ variant: "h5" }}
+        title="Recommended interventions"
+        subheader="Interventions (lab tests) recommendations based on diagnosis "
       />
       <CardContent>
+              <Paper style={{ maxHeight: 200, overflow: "auto" }} elevation={0}>
+
         <List className={classes.root}>
           <ListItem alignItems="flex-start">
             <ListItemIcon>
@@ -81,6 +84,7 @@ export default function Investigation(props) {
             </div>
           ))}
         </List>
+        </Paper>      
       </CardContent>
     </Card>
   );
