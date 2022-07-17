@@ -1,19 +1,20 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import "./Medico-triage.css";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import './Medico-triage.css';
 import {
   Button,
   CircularProgress,
   Grid,
   makeStyles,
   Paper,
-} from "@material-ui/core";
-import { SearchOutlined } from "@material-ui/icons";
-import Diagnosis from "../Diagnosis/diagnosis";
-import Speciality from "../Speciality/Speciality";
-import Investigation from "../Investigation/Investigation";
-import Treatment from "../Treatment/Treatment";
+} from '@material-ui/core';
+import { SearchOutlined } from '@material-ui/icons';
+import Diagnosis from '../Diagnosis/diagnosis';
+import Speciality from '../Speciality/Speciality';
+import Investigation from '../Investigation/Investigation';
+import Treatment from '../Treatment/Treatment';
+import { getDefaultNormalizer } from '@testing-library/react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    margin: "auto",
+    margin: 'auto',
     maxWidth: 700,
   },
   image: {
@@ -29,10 +30,10 @@ const useStyles = makeStyles((theme) => ({
     height: 128,
   },
   img: {
-    margin: "auto",
-    display: "block",
-    maxWidth: "100%",
-    maxHeight: "100%",
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
   },
 }));
 
@@ -43,6 +44,12 @@ export default function MedicoTriage() {
   const [allOptions, setallOptions] = React.useState([]);
   const [showDiagnosis, setshowDiagnosis] = React.useState(false);
   const [showResults, setshowResults] = React.useState(false);
+  const [result, setResult] = React.useState({});
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoadingSpeciality, setIsLoadingSpeciality] = React.useState(true);
+  const [isLoadingInvestigation, setIsLoadingInvestigation] =
+    React.useState(true);
+  const [isLoadingTreatment, setIsLoadingTreatment] = React.useState(true);
 
   const loading = open && options.length === 0;
 
@@ -120,20 +127,47 @@ export default function MedicoTriage() {
     //   });
     //   setallOptions(finalResponse);
     // }
+    let response;
+    try {
+      // response = await axios.get(`url`);
+      response = {
+        possibleDiagnosis: [
+          { value: 'Pulmonary Tuberculosis', probability: '78' },
+          { value: 'xyz', probability: '54' },
+          { value: 'abc', probability: '90' },
+          { value: 'lmn', probability: '12' },
+          { value: 'opq', probability: '33' },
+        ],
+        possibleSpeciality: ['abc', 'mno'],
+        possibleInvestigation: ['Chest X-ray', 'CT Scan'],
+        possibleTreatment: ['Pyrazinamide', 'Rifampicin'],
+      };
+    } catch (error) {
+      setIsLoading(false);
+      setIsLoadingSpeciality(false);
+      setIsLoadingInvestigation(false);
+      setIsLoadingTreatment(false);
+      return;
+    }
+    setResult(response);
+    setIsLoading(false);
+    setIsLoadingSpeciality(false);
+    setIsLoadingInvestigation(false);
+    setIsLoadingTreatment(false);
   };
 
   return (
     <>
       <div className="head">
         <div className={classes.root}>
-          <Paper className={classes.paper} style={{ background: "#3f50b5" }}>
+          <Paper className={classes.paper} style={{ background: '#3f50b5' }}>
             <Grid container spacing={1}>
               <Grid item xs={12} sm container>
                 <Grid item xs container>
                   <Grid item xs={10}>
                     <Autocomplete
                       id="asynchronous"
-                      noOptionsText={"No matches found"}
+                      noOptionsText={'No matches found'}
                       multiple
                       limitTags={3}
                       open={open}
@@ -156,11 +190,11 @@ export default function MedicoTriage() {
                           {...params}
                           placeholder="Enter Symptoms Here...."
                           variant="outlined"
-                          style={{ background: "#ffffff" }}
+                          style={{ background: '#ffffff' }}
                           onChange={(ev) => {
                             // dont fire API if the user delete or not entered anything
                             if (
-                              ev.target.value !== "" ||
+                              ev.target.value !== '' ||
                               ev.target.value !== null
                             ) {
                               onChangeHandle(ev.target.value);
@@ -191,7 +225,7 @@ export default function MedicoTriage() {
                     <Button onClick={getDiagnosis}>
                       <SearchOutlined
                         className="fa fa-plus-circle"
-                        style={{ color: "white", fontSize: 35 }}
+                        style={{ color: 'white', fontSize: 35 }}
                       />
                     </Button>
                   </Grid>
@@ -204,35 +238,64 @@ export default function MedicoTriage() {
 
       <div
         className={classes.root}
-        style={{ marginTop: "12%", marginRight: "5%", marginLeft: "5%" }}
+        style={{ marginTop: '12%', marginRight: '5%', marginLeft: '5%' }}
       >
         <Grid container spacing={3}>
           {showDiagnosis ? (
             <Grid item xs={12}>
               <Paper
                 className={classes.paper}
-                style={{ background: "none", boxShadow: "none" }}
+                style={{ background: 'none', boxShadow: 'none' }}
               >
-                <Diagnosis values={"abc"} getResult={getResult} />
+                {isLoading ? (
+                  <div className="spinner-border text-primary" role="status">
+                    {' '}
+                    <span className="sr-only">Loading...</span>{' '}
+                  </div>
+                ) : (
+                  <Diagnosis values={result.possibleDiagnosis} />
+                )}
+                //<Diagnosis values={"abc"} getResult={getResult} />
               </Paper>
             </Grid>
           ) : (
-            ""
+            ''
           )}
           {showResults ? (
             <>
               <Grid item xs={12} sm={4}>
-                <Speciality />
+                {isLoadingSpeciality ? (
+                  <div className="spinner-border text-primary" role="status">
+                    {' '}
+                    <span className="sr-only">Loading...</span>{' '}
+                  </div>
+                ) : (
+                  <Speciality values={result.possibleSpeciality} />
+                )}
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Investigation />
+                {isLoadingInvestigation ? (
+                  <div className="spinner-border text-primary" role="status">
+                    {' '}
+                    <span className="sr-only">Loading...</span>{' '}
+                  </div>
+                ) : (
+                  <Investigation values={result.possibleInvestigation} />
+                )}
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Treatment />
-              </Grid>{" "}
+                {isLoadingTreatment ? (
+                  <div className="spinner-border text-primary" role="status">
+                    {' '}
+                    <span className="sr-only">Loading...</span>{' '}
+                  </div>
+                ) : (
+                  <Treatment values={result.possibleTreatment} />
+                )}
+              </Grid>{' '}
             </>
           ) : (
-            ""
+            ''
           )}
         </Grid>
       </div>
